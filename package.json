@@ -1,0 +1,30 @@
+{
+  "name": "pullrequest-monitor",
+  "version": "1.0.0",
+  "description": "Example of creating a function that runs as a cron job using the serverless `schedule` event",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "deploy": "serverless deploy",
+    "package": "serverless package"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "eslint": "^8.22.0",
+    "eslint-config-standard-with-typescript": "^22.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.4",
+    "eslint-plugin-promise": "^6.0.0",
+    "serverless": "^3.22.0",
+    "serverless-esbuild": "^1.32.7",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.154.0",
+    "@aws-sdk/client-ssm": "^3.154.0",
+    "dayjs": "^1.11.5",
+    "jwt-decode": "^3.1.2",
+    "node-fetch": "^3.2.10"
+  }
+}
