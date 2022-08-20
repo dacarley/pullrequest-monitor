@@ -11,7 +11,7 @@ dayjs.extend(utc);
 const dateFormat = "YYYY-MM-DD";
 const collectionName = "pullrequest-monitor";
 
-export async function run() {
+export async function handler() {
     const items = await loadItems(collectionName);
 
     let token = items.find(item => item.id === "token")?.value;
@@ -50,6 +50,17 @@ export async function run() {
     });
 }
 
+function parseItems(items: Item[]) {
+    const reviewListItems = items.filter(item => item.id.startsWith("reviewlist-"));
+    const reviewIdsAndDates = reviewListItems.flatMap(item => item.value.split(","));
+    const knownReviewDatesById = mapToObject(reviewIdsAndDates, str => str.split("."));
+
+    return {
+        reviewListIds: reviewListItems.map(item => item.id),
+        knownReviewDatesById,
+    };
+}
+
 async function saveKnownReviews(reviewDatesById: Record<string, string>) {
     const now = dayjs();
 
@@ -72,15 +83,4 @@ async function saveKnownReviews(reviewDatesById: Record<string, string>) {
 
         ++index;
     }
-}
-
-function parseItems(items: Item[]) {
-    const reviewListItems = items.filter(item => item.id.startsWith("reviewlist-"));
-    const reviewIdsAndDates = reviewListItems.flatMap(item => item.value.split(","));
-    const knownReviewDatesById = mapToObject(reviewIdsAndDates, str => str.split("."));
-
-    return {
-        reviewListIds: reviewListItems.map(item => item.id),
-        knownReviewDatesById,
-    };
 }

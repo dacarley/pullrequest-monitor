@@ -34,3 +34,15 @@ rules:
     - argsIgnorePattern: _.*
   no-unused-vars:
     - off
+  no-trailing-spaces:
+    - error
+  key-spacing:
+    - error
+  space-before-blocks:
+    - error
+  block-spacing:
+    - error
+  brace-style:
+    - error
+  keyword-spacing:
+    - error

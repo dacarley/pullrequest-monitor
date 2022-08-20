@@ -2,6 +2,7 @@ import { SESv2 } from "@aws-sdk/client-sesv2";
 import type { Review } from "./types";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import {marked} from "marked";
 
 dayjs.extend(relativeTime);
 
@@ -10,14 +11,15 @@ const ses = new SESv2({});
 export async function sendReviewsEmail(reviews: Review[]) {
     const reviewsHtml = reviews.map(review => {
         return [
-            `<a href='https://reviewer.pullrequest.com/claim/${review.uuid}'><b>${review.title}</b></a>`,
+            `<h1><a href='https://reviewer.pullrequest.com/claim/${review.uuid}'>${review.title}</a></h1>`,
             `${review.repository_name}`,
             `Opened <b>${dayjs(review.received_at).fromNow()}</b>`,
             getAdditionsAndDeletions(review),
-            `Reviewed <b>${review.reviews_posted} ${review.reviews_posted ? "times" : "time"}</b>`,
-            getSkills(review)
+            `Reviewed <b>${review.reviews_posted} ${review.reviews_posted === 1 ? "time" : "times"}</b>`,
+            getSkills(review),
+            marked.parse(review.body)
         ].map(str => `<div>${str}</div>`).join("\n");
-    }).map(str => `<div style='margin-bottom: 20px;'>${str}</div>`).join("");
+    }).map(str => `<div style='margin-bottom: 50px;'>${str}</div>`).join("");
 
     await ses.sendEmail({
         FromEmailAddress: "dacarley@gmail.com",
@@ -28,7 +30,19 @@ export async function sendReviewsEmail(reviews: Review[]) {
             Simple: {
                 Body: {
                     Html: {
-                        Data: `<html><body>${reviewsHtml}</body></html>`,
+                        Data: `
+                            <html>
+                                <body>
+                                    ${reviewsHtml}
+
+                                    <h1 style='color: green;'>
+                                        <a href='${process.env.API_URL}/clear'>
+                                            Click here to clear the list of known reviews
+                                        </a>
+                                    </h1>
+                                </body>
+                            </html>
+                        `,
                     }
                 },
                 Subject: {
