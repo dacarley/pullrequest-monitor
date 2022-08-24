@@ -15,6 +15,7 @@ provider:
   versionFunctions: false
   timeout: 10
   environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     API_URL:
       Fn::Join:
         - ""

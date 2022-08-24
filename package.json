@@ -5,8 +5,9 @@
   "author": "",
   "license": "MIT",
   "scripts": {
-    "deploy": "serverless deploy",
-    "package": "serverless package"
+    "sls": "sls",
+    "deploy": "sls deploy",
+    "package": "sls package"
   },
   "devDependencies": {
     "@types/marked": "^4.0.5",
