@@ -9,7 +9,9 @@ export async function handler() {
         .map(item => item.id)
         .filter(id => id.startsWith("reviewlist-"));
 
-    await deleteItems(collectionName, idsToDelete);
+    if (idsToDelete.length) {
+        await deleteItems(collectionName, idsToDelete);
+    }
 
     return {
         statusCode: 200,
